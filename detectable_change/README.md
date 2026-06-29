@@ -12,7 +12,7 @@ Python 3.8 or later with:
 
 The calibration tools (in `calibration/`) additionally need `Pillow` (`PIL`) and `tkinter`. See `calibration/README.md`.
 
-Install everything for this folder in one shot from the repo root:
+Install everything in one shot:
 
 ```bash
 pip install -r requirements.txt

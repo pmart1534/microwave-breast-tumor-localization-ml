@@ -1,0 +1,9 @@
+# Python requirements for the analysis scripts in this folder.
+# (Only needed for the Python tools — the MATLAB code in matlab/ has its own
+# toolbox requirements; see matlab/*/README.md.)
+#
+# Install with:  pip install -r requirements.txt
+numpy
+scipy
+matplotlib
+Pillow

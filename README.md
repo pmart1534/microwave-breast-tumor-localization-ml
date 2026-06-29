@@ -49,9 +49,9 @@ The data-recording program (`matlab/data_recording/Imager_DataRecording.m`) supp
 ## Requirements
 
 - **MATLAB R2020a or later** with Deep Learning Toolbox, Statistics and Machine Learning Toolbox, and Instrument Control Toolbox (for the VNA acquisition). See `matlab/data_recording/README.md` and `matlab/cnn_training/README.md` for details.
-- **Python 3.8 or later** with `numpy`, `scipy`, `matplotlib`, and `Pillow`. Install with:
+- **Python 3.8 or later** with `numpy`, `scipy`, `matplotlib`, and `Pillow` (the latter only needed for the calibration tools). The Python scripts live under `detectable_change/`; install their requirements with:
   ```bash
-  pip install -r requirements.txt
+  pip install -r detectable_change/requirements.txt
   ```
 
 ## How to Reproduce
