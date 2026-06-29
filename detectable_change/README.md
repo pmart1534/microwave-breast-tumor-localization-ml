@@ -2,6 +2,22 @@
 
 This folder produces the final detectable-change figure from the paper (Fig. 4). It also contains the helper tools used to build the per-position CNN-accuracy CSVs and the phantom-outline calibration that the figure overlays.
 
+## Requirements
+
+Python 3.8 or later with:
+
+- `numpy`
+- `scipy`
+- `matplotlib`
+
+The calibration tools (in `calibration/`) additionally need `Pillow` (`PIL`) and `tkinter`. See `calibration/README.md`.
+
+Install everything for this folder in one shot from the repo root:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Pipeline at a Glance
 
 ```

@@ -46,6 +46,14 @@ The data-recording program (`matlab/data_recording/Imager_DataRecording.m`) supp
 | `A2_F4/` | 1 | 16 | Medium fibroglandular insert; position R4C2P1 excluded for the detectable-change plot (direct coupling artifact) |
 | `A2_F5/` | 2 | 16, 28 | Largest fibroglandular insert; the configuration that exposes the live-prediction failure mode discussed in Section IV |
 
+## Requirements
+
+- **MATLAB R2020a or later** with Deep Learning Toolbox, Statistics and Machine Learning Toolbox, and Instrument Control Toolbox (for the VNA acquisition). See `matlab/data_recording/README.md` and `matlab/cnn_training/README.md` for details.
+- **Python 3.8 or later** with `numpy`, `scipy`, `matplotlib`, and `Pillow`. Install with:
+  ```bash
+  pip install -r requirements.txt
+  ```
+
 ## How to Reproduce
 
 1. **CNN training (MATLAB).** Open `matlab/cnn_training/Hierarchical_Classification_ML.m`, point the data path at one of the `datasets/` folders, and run. The script performs the random hyperparameter search described in Table I and saves the trained Stage 1 and Stage 2 models.
