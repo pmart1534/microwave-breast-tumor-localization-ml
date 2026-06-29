@@ -1,0 +1,17 @@
+{
+  "A2_Empty": {
+    "n_files": 2,
+    "n_pos_with_object_trials": 40,
+    "baseline_trials_pooled": 32
+  },
+  "A2_F4": {
+    "n_files": 1,
+    "n_pos_with_object_trials": 37,
+    "baseline_trials_pooled": 16
+  },
+  "A2_F5": {
+    "n_files": 2,
+    "n_pos_with_object_trials": 32,
+    "baseline_trials_pooled": 44
+  }
+}

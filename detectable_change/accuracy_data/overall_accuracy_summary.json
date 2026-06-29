@@ -1,0 +1,20 @@
+{
+  "A2_Empty": {
+    "source": "SpatialAcc_WithinSession_COMBINED_2Files_64Pos_32Trials_20260411_1628_NoGlandular_2026-06-01_153055.txt",
+    "overall_accuracy": 1.0,
+    "n_positions_with_test_samples": 40,
+    "n_positions_total": 64
+  },
+  "A2_F4": {
+    "source": "SpatialAcc_WithinSession_FIXEDImager_BreastPhantom_A2_Gland_F4_OriginalBreastAntenna_MetalMarble_64Pos_16Trials_20260411_1917_2026-06-01_153849.txt",
+    "overall_accuracy": 1.0,
+    "n_positions_with_test_samples": 38,
+    "n_positions_total": 38
+  },
+  "A2_F5": {
+    "source": "SpatialAcc_WithinSession_Imager_BreastPhantom_A2_Gland_F5_ManetobaAntenna_MetalMarble_64Pos_28Trials_20260413_1157_2026-06-01_153534.txt",
+    "overall_accuracy": 0.9224,
+    "n_positions_with_test_samples": 24,
+    "n_positions_total": 24
+  }
+}
