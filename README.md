@@ -24,11 +24,14 @@ matlab/
 
 detectable_change/                   Python detectable-change analysis (Fig. 4)
   detectable_difference.py           Computes per-position Z(p) in dB from the .mat files
-  brainstorm_variations.py           Generates the v24 figure used in the paper
-  position_adjustments.json          Hand-adjusted dot positions for the glandular layouts
+  parse_accuracy_txt.py              Converts MATLAB SpatialAcc_*.txt → CSV format
+  paper_figure.py                    Renders the final Fig. 4 (uses outputs of the two above)
+  position_adjustments.json          Hand-adjusted tumor dot positions for the glandular layouts
   accuracy_data/                     Per-position CNN accuracy CSVs (used for dot sizes)
   results/                           Pre-computed .npz / .csv outputs from detectable_difference.py
-  v24_final_size_accuracy.png        Rendered figure (same as Fig. 4)
+  figures/                           Output PNGs
+  calibration/                       Interactive Tk tools for re-tracing phantom outlines
+                                     and adjusting tumor dot positions on photos
 ```
 
 ## Datasets
@@ -46,7 +49,7 @@ The data-recording program (`matlab/data_recording/Imager_DataRecording.m`) supp
 ## How to Reproduce
 
 1. **CNN training (MATLAB).** Open `matlab/cnn_training/Hierarchical_Classification_ML.m`, point the data path at one of the `datasets/` folders, and run. The script performs the random hyperparameter search described in Table I and saves the trained Stage 1 and Stage 2 models.
-2. **Detectable-change analysis (Python).** From `detectable_change/`, run `python detectable_difference.py` to regenerate the per-configuration `.npz` results, then `python brainstorm_variations.py` to render the v24 panel figure used as Fig. 4.
+2. **Detectable-change analysis (Python).** From `detectable_change/`, run `python paper_figure.py` to render Fig. 4 using the pre-computed `results/` and `accuracy_data/` already in the repo. To regenerate the intermediate results from scratch, see `detectable_change/README.md` for the full step-by-step pipeline (raw `.mat` → `detectable_difference.py` → `.npz`, MATLAB `SpatialAcc_*.txt` → `parse_accuracy_txt.py` → CSV, then `paper_figure.py`). For re-tracing the phantom outlines on new photos, see `detectable_change/calibration/README.md`.
 
 ## Acknowledgments
 
