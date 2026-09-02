@@ -1,0 +1,17 @@
+{
+  "A3_Empty": {
+    "n_sessions": 1,
+    "n_positions": 51,
+    "baseline_trials": 16
+  },
+  "A3_F4": {
+    "n_sessions": 4,
+    "n_positions": 39,
+    "baseline_trials": 64
+  },
+  "A3_F5": {
+    "n_sessions": 5,
+    "n_positions": 33,
+    "baseline_trials": 80
+  }
+}
