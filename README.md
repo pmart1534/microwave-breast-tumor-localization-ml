@@ -84,6 +84,23 @@ test scenarios) is hosted on **IEEE DataPort**
 5. **Unseen-position regression (Section III-F):**
    `matlab/cnn_training_v2/Imager_CNN_RegLOPO.m` (default `LOPO_MODE=pooled`).
 
+6. **Revision 2 additions:**
+   - *Antenna-swap ablations (swap entries in Tables II, VI, VII):* same LOSO
+     runs as step 2 with `CNN_LOSO_PARENT` pointed at the
+     `A3_MetalTumor_SwapAntLocation` sessions (result files carry the
+     `swapAbl`/`swapLOAO` tags).
+   - *Cross-surrogate transfer (metal-trained CNN tested on beet, Section
+     III-E):* `matlab/cnn_training_v2/Imager_CNN_XDay.m` with
+     `CNN_XDAY_TRAIN_SESSIONS` set to the metal reference sessions,
+     `CNN_XDAY_TEST_SESSIONS` to the beet sessions, and the same `paperBO`
+     preprocessing flags (result files carry the `v2preds` / `m2b` / `b2m`
+     tags). Optional amplitude matching via `CNN_XDAY_GAIN_MODE`
+     (`scale_test` or `scale_train`).
+   - *Transfer error analysis (adjacent-position errors, confusion matrices):*
+     `figures_paper/analysis_cross_surrogate.py`, which reads the `v2preds`
+     JSONs and writes `xsurr_arrows_*.png` / `xsurr_confusion_*.png` into
+     `results_paper/`.
+
 Pre-computed outputs for every table are in `results_paper/` so the numbers can
 be verified without re-running.
 

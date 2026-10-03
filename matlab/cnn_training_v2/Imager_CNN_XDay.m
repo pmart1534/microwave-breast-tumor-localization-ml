@@ -308,6 +308,29 @@ allPredTest = {};
 
 [XTrain, yTrain] = gatherSamples(built(1:nTrain), validPos);
 YTrain = categorical(yTrain, validPos);
+
+% Optional cross-surrogate amplitude matching (JERM R2 revision):
+%   CNN_XDAY_GAIN_MODE = scale_test  -> scale TEST magnitude rows to match the
+%                                       training RMS (per test session)
+%                      = scale_train -> scale TRAIN magnitude rows down/up to
+%                                       match the pooled test RMS
+% Magnitude rows are 1:2:end for the raw mag/phase representation.
+gainMode = lower(strtrim(getenv('CNN_XDAY_GAIN_MODE')));
+rmsTrain = sqrt(mean(XTrain(1:2:end,:,:,:).^2, 'all'));
+if strcmp(gainMode, 'scale_train')
+    accum = 0; cnt = 0;
+    for t = 1:nTest
+        [Xt, ~] = gatherSamples(built(nTrain + t), validPos);
+        accum = accum + sum(Xt(1:2:end,:,:,:).^2, 'all');
+        cnt = cnt + numel(Xt(1:2:end,:,:,:));
+    end
+    rmsTestAll = sqrt(accum / cnt);
+    gTr = rmsTestAll / rmsTrain;
+    XTrain(1:2:end,:,:,:) = XTrain(1:2:end,:,:,:) * gTr;
+    fprintf('  [gain] scale_train: train mag rows x %.4f (train RMS %.3g -> test RMS %.3g)\n', ...
+        gTr, rmsTrain, rmsTestAll);
+end
+
 t0 = tic;
 net = trainCNN(XTrain, YTrain, numSParamRows, numFreqPoints, nClasses, cfg, execEnv);
 fprintf('  trained once on %d train-group samples (%.1fs)\n', numel(yTrain), toc(t0));
@@ -316,6 +339,12 @@ for t = 1:nTest
     s = nTrain + t;
     [XTest, yTest] = gatherSamples(built(s), validPos);
     YTest = categorical(yTest, validPos);
+    if strcmp(gainMode, 'scale_test')
+        rmsTe = sqrt(mean(XTest(1:2:end,:,:,:).^2, 'all'));
+        gTe = rmsTrain / rmsTe;
+        XTest(1:2:end,:,:,:) = XTest(1:2:end,:,:,:) * gTe;
+        fprintf('  [gain] scale_test session %d: test mag rows x %.4f\n', t, gTe);
+    end
     predTest = classify(net, XTest);
 
     trialAcc = mean(predTest == YTest) * 100;
@@ -387,6 +416,8 @@ result.losoPosMean   = losoPosMean;
 result.losoPosStd    = losoPosStd;
 result.perPosition   = posAccMap;
 result.cnnConfig     = cfg;
+result.trueLabels    = allTrueTest;   % per test trial, all test sessions pooled
+result.predLabels    = allPredTest;
 
 jsonPath = fullfile(resultsDir, sprintf('cnn_xday_%s.json', tag));
 fid = fopen(jsonPath, 'w'); fprintf(fid, '%s', jsonencode(result, 'PrettyPrint', true)); fclose(fid);
@@ -663,7 +694,8 @@ function S = buildSession(loaded, selRows, pairs, inputMode, nTdr, bandGHz)
     end
 
     % ---- step 4: per-session z-score (per pixel, across samples) ----
-    if n > 1
+    % (skippable: CNN_LOSO_ZSCORE=off keeps only baseline subtraction)
+    if n > 1 && ~strcmpi(strtrim(getenv('CNN_LOSO_ZSCORE')), 'off')
         X = (X - mean(X, 4)) ./ (std(X, 0, 4) + 1e-8);
     end
 
@@ -726,8 +758,13 @@ end
 function net = trainCNN(XTrain, YTrain, nRows, nFreq, nClasses, cfg, execEnv)
 % The SAME single-stage CNN as Imager_ML_MultiSession.m (no leakage: the
 % held-out session is never shown as validation data during LOSO training).
+    if strcmpi(strtrim(getenv('CNN_LOSO_INPUTNORM')), 'none')
+        inNorm = 'none';
+    else
+        inNorm = 'zscore';
+    end
     layers = [
-        imageInputLayer([nRows nFreq 1], 'Normalization', 'zscore', 'Name', 'input')
+        imageInputLayer([nRows nFreq 1], 'Normalization', inNorm, 'Name', 'input')
         convolution2dLayer([min(4,nRows) min(20,nFreq)], cfg.Conv1, 'Padding', 'same', 'Name', 'conv1')
         batchNormalizationLayer('Name', 'bn1')
         reluLayer('Name', 'relu1')
